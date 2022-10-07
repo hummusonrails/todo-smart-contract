@@ -66,6 +66,15 @@ mod todo {
             });
         }
 
+        /// Update an existing task
+        #[ink(message)]
+        pub fn update_task(&mut self, id: u32, title: String, description: String, completed: bool) {
+            let task = self.task.iter_mut().find(|task| task.id == id).unwrap();
+            task.title = title;
+            task.description = description;
+            task.completed = completed;
+        }
+
         /// Simply returns all the tasks.
         #[ink(message)]
         pub fn get_tasks(&self) -> Vec<Task> {
