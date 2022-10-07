@@ -1,4 +1,4 @@
-#![cfg_attr(not(feature = "std"), derive(scale_info::TypeInfo))]
+#![cfg_attr(not(feature = "std"), no_std)]
 use ink_lang as ink;
 
 #[ink::contract]
@@ -8,7 +8,8 @@ mod todo {
     use ink_storage::traits::{PackedLayout, SpreadLayout};
 
     // Structure to store Todo information
-    #[derive(Clone, Debug, scale::Encode, scale::Decode, SpreadLayout, PackedLayout,scale_info::TypeInfo)]
+    #[derive(Clone, Debug, scale::Encode, scale::Decode, SpreadLayout, PackedLayout)]
+    #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
     pub struct Task {
         title: String,
         description: String,
@@ -32,7 +33,7 @@ mod todo {
             let user = Self::env().caller();
             let mut task: Vec<Task> = Vec::new();
 
-            task.insert(0, Task {
+            task.push(Task {
                 title: String::from(""),
                 description: String::from(""),
                 completed: false,
@@ -56,7 +57,7 @@ mod todo {
         #[ink(message)]
         pub fn add_task(&mut self, account_id: AccountId, title: String, description: String) {
             let id = self.task.len()+1;
-            self.task.insert(0, Task {
+            self.task.push(Task {
                 title,
                 description,
                 completed: false,
