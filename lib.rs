@@ -94,17 +94,9 @@ mod todo {
         /// We test if the default constructor does its job.
         #[ink::test]
         fn default_works() {
-            let todo = Todo::default();
-            assert_eq!(todo.get_tasks(), {
-                (0, String::from("Our first task"), String::from("This is the first task in our todo list!"), false, 1)
-            });
-        }
-
-        /// We test a simple use case of our contract.
-        #[ink::test]
-        fn it_works() {
-            let mut todo = Todo::new(0, String::from("Our first task"), String::from("This is the first task in our todo list!"), false, 1);
-            assert_eq!(todo.get_tasks(), todo);
+            let mut todos = Todos::default();
+            todos.task.push(Task { title: String::from("this is a title"), description: String::from("this is a description"), completed: false, id: 0, account_id: AccountId::from([0x0; 32]) });
+            assert_eq!(todos.get_tasks()[1].title, { "this is a title" });
         }
     }
 }
